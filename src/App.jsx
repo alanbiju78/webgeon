@@ -80,58 +80,78 @@ export default function App() {
   return (
     <div style={styles.page}>
       <div style={styles.app}>
+        {/* Header */}
         <div style={styles.header}>
           <div style={styles.titleBlock}>
             <h1 style={styles.title}>Formula Builder</h1>
             <p style={styles.subtitle}>
-              Define reusable salary or billing variables, plug them into dynamic
-              formulas, and execute them with contextual inputs — all in your
-              browser.
+              Define reusable salary or billing variables, plug them into
+              dynamic formulas, and execute them with contextual inputs — all in
+              your browser.
             </p>
           </div>
           <div style={styles.badge}>React · Client-side · Offline</div>
         </div>
 
+        {/* Main grid: left = forms, right = lists */}
         <div style={styles.grid}>
-          {/* Variables card */}
-          <div style={styles.card}>
-            <div style={styles.cardHeader}>
-              <h2 style={styles.cardTitle}>Variables</h2>
-              <span style={styles.cardHint}>Constants &amp; derived values</span>
+          {/* LEFT COLUMN: forms */}
+          <div style={styles.leftColumn}>
+            <div style={styles.card}>
+              <div style={styles.cardHeader}>
+                <h2 style={styles.cardTitle}>Variables</h2>
+                <span style={styles.cardHint}>
+                  Constants &amp; derived values
+                </span>
+              </div>
+
+              <VariableForm
+                onAdd={(variable) =>
+                  dispatch({ type: "ADD_VARIABLE", payload: variable })
+                }
+              />
             </div>
 
-            <VariableForm
-              onAdd={(variable) =>
-                dispatch({ type: "ADD_VARIABLE", payload: variable })
-              }
-            />
+            <div style={styles.card}>
+              <div style={styles.cardHeader}>
+                <h2 style={styles.cardTitle}>Formulas</h2>
+                <span style={styles.cardHint}>
+                  Use variables &amp; contextual inputs
+                </span>
+              </div>
 
-            <VariablesList
-              variables={state.variables}
-              onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
-            />
+              <FormulaForm
+                onAdd={(formula) =>
+                  dispatch({ type: "ADD_FORMULA", payload: formula })
+                }
+                variables={state.variables}
+              />
+            </div>
           </div>
 
-          {/* Formulas card */}
-          <div style={styles.card}>
-            <div style={styles.cardHeader}>
-              <h2 style={styles.cardTitle}>Formulas</h2>
-              <span style={styles.cardHint}>
-                Use variables &amp; contextual inputs
-              </span>
+          {/* RIGHT COLUMN: lists (side by side) */}
+          <div style={styles.rightGrid}>
+            <div style={styles.card}>
+              <div style={styles.cardHeader}>
+                <h2 style={styles.cardTitle}>Variable List</h2>
+                <span style={styles.cardHint}>All defined variables</span>
+              </div>
+              <VariablesList
+                variables={state.variables}
+                onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
+              />
             </div>
 
-            <FormulaForm
-              onAdd={(formula) =>
-                dispatch({ type: "ADD_FORMULA", payload: formula })
-              }
-              variables={state.variables}
-            />
-
-            <FormulasList
-              formulas={state.formulas}
-              variables={state.variables}
-            />
+            <div style={styles.card}>
+              <div style={styles.cardHeader}>
+                <h2 style={styles.cardTitle}>Formula List</h2>
+                <span style={styles.cardHint}>All saved formulas</span>
+              </div>
+              <FormulasList
+                formulas={state.formulas}
+                variables={state.variables}
+              />
+            </div>
           </div>
         </div>
       </div>

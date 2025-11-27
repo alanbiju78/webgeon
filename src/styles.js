@@ -57,12 +57,25 @@ export const styles = {
     color: "#dbeafe",
     whiteSpace: "nowrap",
   },
-  grid: {
+   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-    gap: "20px",
+    gridTemplateColumns: "minmax(320px, 380px) minmax(480px, 1fr)",
+    gap: "24px",
     marginTop: "8px",
+    alignItems: "flex-start",
+      leftColumn: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
   },
+  rightGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+  },
+
+  },
+
   card: {
     borderRadius: "18px",
     padding: "16px 16px 18px",
