@@ -41,6 +41,23 @@ export function appReducer(state, action) {
     case "LOAD_STATE":
       return action.payload;
 
+    case "UPDATE_VARIABLE":
+        return {
+            ...state,
+            variables: state.variables.map((v) =>
+            v.id === action.payload.id ? action.payload : v
+            ),
+        };
+
+    case "UPDATE_FORMULA":
+        return {
+            ...state,
+            formulas: state.formulas.map((f) =>
+            f.id === action.payload.id ? action.payload : f
+            ),
+        };
+
+
     default:
       return state;
   }

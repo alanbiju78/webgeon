@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useState } from "react";
 import { styles } from "./styles";
 
 import VariableForm from "./components/variables/VariableForm";
@@ -22,6 +22,14 @@ function reducer(state, action) {
         variables: [...state.variables, action.payload],
       };
 
+    case "UPDATE_VARIABLE":
+      return {
+        ...state,
+        variables: state.variables.map((v) =>
+          v.id === action.payload.id ? action.payload : v
+        ),
+      };
+
     case "DELETE_VARIABLE":
       return {
         ...state,
@@ -32,6 +40,14 @@ function reducer(state, action) {
       return {
         ...state,
         formulas: [...state.formulas, action.payload],
+      };
+
+    case "UPDATE_FORMULA":
+      return {
+        ...state,
+        formulas: state.formulas.map((f) =>
+          f.id === action.payload.id ? action.payload : f
+        ),
       };
 
     case "DELETE_FORMULA":
@@ -52,6 +68,10 @@ function reducer(state, action) {
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // which variable / formula is currently being edited
+  const [editingVariable, setEditingVariable] = useState(null);
+  const [editingFormula, setEditingFormula] = useState(null);
 
   // load from localStorage once
   useEffect(() => {
@@ -90,7 +110,6 @@ export default function App() {
               your browser.
             </p>
           </div>
-          
         </div>
 
         {/* Main grid: left = forms, right = lists */}
@@ -109,6 +128,11 @@ export default function App() {
                 onAdd={(variable) =>
                   dispatch({ type: "ADD_VARIABLE", payload: variable })
                 }
+                onUpdate={(variable) =>
+                  dispatch({ type: "UPDATE_VARIABLE", payload: variable })
+                }
+                editingVariable={editingVariable}
+                setEditingVariable={setEditingVariable}
               />
             </div>
 
@@ -125,6 +149,11 @@ export default function App() {
                 onAdd={(formula) =>
                   dispatch({ type: "ADD_FORMULA", payload: formula })
                 }
+                onUpdate={(formula) =>
+                  dispatch({ type: "UPDATE_FORMULA", payload: formula })
+                }
+                editingFormula={editingFormula}
+                setEditingFormula={setEditingFormula}
                 variables={state.variables}
               />
             </div>
@@ -143,6 +172,10 @@ export default function App() {
                   onDelete={(id) =>
                     dispatch({ type: "DELETE_VARIABLE", id })
                   }
+                  onEdit={(variable) => {
+                    setEditingVariable(variable);
+                    // scroll left form into view if needed (optional)
+                  }}
                 />
               </div>
             </div>
@@ -156,6 +189,9 @@ export default function App() {
                 <FormulasList
                   formulas={state.formulas}
                   variables={state.variables}
+                  onEdit={(formula) => {
+                    setEditingFormula(formula);
+                  }}
                 />
               </div>
             </div>

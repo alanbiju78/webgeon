@@ -1,23 +1,43 @@
-// components/formulas/FormulaForm.jsx
-import React, { useMemo } from "react";
+// src/components/formulas/FormulaForm.jsx
+import React, { useEffect, useMemo, useState } from "react";
 import { styles } from "../../styles";
 import {
   extractContextualVars,
   extractVariableNamesFromExpression,
 } from "../../utils/expressionUtils";
 
-function FormulaForm({ onAdd, variables }) {
-  const [name, setName] = React.useState("");
-  const [expression, setExpression] = React.useState("");
+export default function FormulaForm({
+  onAdd,
+  onUpdate,
+  editingFormula,
+  setEditingFormula,
+  variables,
+}) {
+  const [name, setName] = useState("");
+  const [expression, setExpression] = useState("");
 
   const definedVarNames = useMemo(
     () => variables.map((v) => v.name),
     [variables]
   );
 
+  useEffect(() => {
+    if (editingFormula) {
+      setName(editingFormula.name);
+      setExpression(editingFormula.expression);
+    }
+  }, [editingFormula]);
+
+  function resetForm() {
+    setName("");
+    setExpression("");
+    setEditingFormula(null);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     const trimmedName = name.trim().toUpperCase();
+
     if (!trimmedName) {
       alert("Formula name is required");
       return;
@@ -27,6 +47,7 @@ function FormulaForm({ onAdd, variables }) {
       return;
     }
 
+    // Validate that all non-context variables are defined
     const ctxVars = extractContextualVars(expression);
     const varNames = extractVariableNamesFromExpression(expression);
     const nonContextVars = varNames.filter((v) => !ctxVars.includes(v));
@@ -41,14 +62,19 @@ function FormulaForm({ onAdd, variables }) {
       return;
     }
 
-    onAdd({
-      id: Date.now().toString(),
+    const payload = {
+      id: editingFormula ? editingFormula.id : Date.now().toString(),
       name: trimmedName,
       expression: expression.trim(),
-    });
+    };
 
-    setName("");
-    setExpression("");
+    if (editingFormula) {
+      onUpdate(payload);
+    } else {
+      onAdd(payload);
+    }
+
+    resetForm();
   }
 
   return (
@@ -66,10 +92,17 @@ function FormulaForm({ onAdd, variables }) {
         style={styles.input}
       />
       <button type="submit" style={styles.button}>
-        Add Formula
+        {editingFormula ? "Save Formula" : "Add Formula"}
       </button>
+      {editingFormula && (
+        <button
+          type="button"
+          style={styles.buttonDanger}
+          onClick={resetForm}
+        >
+          Cancel Edit
+        </button>
+      )}
     </form>
   );
 }
-
-export default FormulaForm;

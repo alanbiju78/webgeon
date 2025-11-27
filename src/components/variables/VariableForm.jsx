@@ -1,15 +1,37 @@
-// components/variables/VariableForm.jsx
-import React from "react";
-import { styles } from "../../styles"; // we'll create this in a sec or keep inline
+// src/components/variables/VariableForm.jsx
+import React, { useEffect, useState } from "react";
+import { styles } from "../../styles";
 
-function VariableForm({ onAdd }) {
-  const [name, setName] = React.useState("");
-  const [type, setType] = React.useState("CONSTANT");
-  const [expression, setExpression] = React.useState("");
+export default function VariableForm({
+  onAdd,
+  onUpdate,
+  editingVariable,
+  setEditingVariable,
+}) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("CONSTANT");
+  const [expression, setExpression] = useState("");
+
+  // whenever we enter edit mode, load that variable into the form
+  useEffect(() => {
+    if (editingVariable) {
+      setName(editingVariable.name);
+      setType(editingVariable.type);
+      setExpression(editingVariable.expression);
+    }
+  }, [editingVariable]);
+
+  function resetForm() {
+    setName("");
+    setType("CONSTANT");
+    setExpression("");
+    setEditingVariable(null);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
     const trimmedName = name.trim().toUpperCase();
+
     if (!trimmedName) {
       alert("Variable name is required");
       return;
@@ -23,16 +45,20 @@ function VariableForm({ onAdd }) {
       return;
     }
 
-    onAdd({
-      id: Date.now().toString(),
+    const payload = {
+      id: editingVariable ? editingVariable.id : Date.now().toString(),
       name: trimmedName,
       type,
       expression: expression.trim(),
-    });
+    };
 
-    setName("");
-    setExpression("");
-    setType("CONSTANT");
+    if (editingVariable) {
+      onUpdate(payload);
+    } else {
+      onAdd(payload);
+    }
+
+    resetForm();
   }
 
   return (
@@ -62,10 +88,17 @@ function VariableForm({ onAdd }) {
         style={styles.input}
       />
       <button type="submit" style={styles.button}>
-        Add Variable
+        {editingVariable ? "Save Variable" : "Add Variable"}
       </button>
+      {editingVariable && (
+        <button
+          type="button"
+          style={styles.buttonDanger}
+          onClick={resetForm}
+        >
+          Cancel Edit
+        </button>
+      )}
     </form>
   );
 }
-
-export default VariableForm;

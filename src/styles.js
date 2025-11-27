@@ -191,6 +191,13 @@ rightGrid: {
     fontSize: "0.85rem",
     marginTop: "4px",
   },
+
+leftColumn: {
+  display: "flex",
+  flexDirection: "column",
+  gap: "16px",
+  },
+
   tableHeaderCell: {
     textAlign: "left",
     padding: "6px 4px",
@@ -233,15 +240,17 @@ rightGrid: {
     fontSize: "0.8rem",
     color: "#9ca3af",
   },
-    listBody: {
-    marginTop: "6px",
-    maxHeight: "260px",      // 👈 adjust this height if you want taller/shorter
-    overflowY: "auto",
-    paddingRight: "4px",     // little space so scrollbar doesn't overlap content
-  },
-    listCard: {
-    height: "320px",         // fixed card height for lists
-    display: "flex",
-    flexDirection: "column",
-  },
+listCard: {
+  minHeight: "380px",        // ⬅️ make the list cards taller
+  display: "flex",
+  flexDirection: "column",
+},
+
+listBody: {
+  marginTop: "6px",
+  flex: 1,                    // ⬅️ take up remaining card height
+  overflowY: "auto",
+  paddingRight: "4px",
+},
+
 };
