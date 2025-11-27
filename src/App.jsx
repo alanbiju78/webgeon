@@ -113,8 +113,9 @@ export default function App() {
             </div>
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>
-                <h2 style={styles.cardTitle}>Formulas</h2>
+              {/* stacked header to avoid overlap */}
+              <div style={styles.cardHeaderStack}>
+                <span style={styles.cardTitle}>Formulas</span>
                 <span style={styles.cardHint}>
                   Use variables &amp; contextual inputs
                 </span>
@@ -135,13 +136,13 @@ export default function App() {
             <div style={{ ...styles.card, ...styles.listCard }}>
               <div style={styles.cardHeader}>
                 <h2 style={styles.cardTitle}>Variable List</h2>
-                <span style={styles.cardHint}>All defined variables</span>
               </div>
-
               <div style={styles.listBody}>
                 <VariablesList
                   variables={state.variables}
-                  onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
+                  onDelete={(id) =>
+                    dispatch({ type: "DELETE_VARIABLE", id })
+                  }
                 />
               </div>
             </div>
@@ -150,9 +151,7 @@ export default function App() {
             <div style={{ ...styles.card, ...styles.listCard }}>
               <div style={styles.cardHeader}>
                 <h2 style={styles.cardTitle}>Formula List</h2>
-                <span style={styles.cardHint}>All saved formulas</span>
               </div>
-
               <div style={styles.listBody}>
                 <FormulasList
                   formulas={state.formulas}

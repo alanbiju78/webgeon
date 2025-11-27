@@ -13,17 +13,20 @@ export const styles = {
     boxSizing: "border-box",
   },
   app: {
-    width: "100%",
-    maxWidth: "1120px",
-    padding: "24px 24px 32px",
-    borderRadius: "24px",
-    background:
-      "linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9))",
-    boxShadow:
-      "0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(148,163,184,0.15)",
-    border: "1px solid rgba(148,163,184,0.35)",
-    boxSizing: "border-box",
-  },
+  width: "100%",
+  maxWidth: "100%",               // ⬅️ remove width cap
+  margin: "0",                    // no centering gap
+  padding: "24px 32px 32px",
+  borderRadius: "24px",
+  background:
+    "linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9))",
+  boxShadow:
+    "0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(148,163,184,0.15)",
+  border: "1px solid rgba(148,163,184,0.35)",
+  boxSizing: "border-box",
+},
+
+
   header: {
     marginBottom: "24px",
     display: "flex",
@@ -57,28 +60,38 @@ export const styles = {
     color: "#dbeafe",
     whiteSpace: "nowrap",
   },
-   grid: {
-    display: "grid",
-    gridTemplateColumns: "minmax(320px, 380px) minmax(480px, 1fr)",
-    gap: "24px",
-    marginTop: "8px",
-    alignItems: "flex-start",
-      leftColumn: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  rightGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "16px",
-  },
 
-  },
+
+grid: {
+  display: "grid",
+  gridTemplateColumns: "280px minmax(0, 1fr)", // left fixed, right takes rest
+  gap: "24px",
+  marginTop: "8px",
+  width: "100%",
+  alignItems: "flex-start",
+},
+
+rightGrid: {
+  display: "grid",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))", // two equal columns
+  gap: "16px",
+  width: "100%",
+},
+
 
   card: {
     borderRadius: "18px",
     padding: "16px 16px 18px",
+    background:
+      "radial-gradient(circle at top left, rgba(37,99,235,0.15), transparent 55%), #020617",
+    border: "1px solid rgba(30,64,175,0.55)",
+    boxShadow: "0 16px 35px rgba(15,23,42,0.8)",
+  },
+
+  vhcard: {
+    borderRadius: "18px",
+    padding: "16px 16px 18px",
+    width: "400px",
     background:
       "radial-gradient(circle at top left, rgba(37,99,235,0.15), transparent 55%), #020617",
     border: "1px solid rgba(30,64,175,0.55)",
@@ -90,6 +103,16 @@ export const styles = {
     alignItems: "center",
     marginBottom: "10px",
   },
+
+  cardHeaderStack: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "2px",
+    marginBottom: "10px",
+  },
+
+
   cardTitle: {
     fontSize: "1rem",
     fontWeight: 600,

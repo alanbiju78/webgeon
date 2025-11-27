@@ -12,28 +12,29 @@ function FormulasList({ formulas, variables }) {
     return <p>No formulas defined yet.</p>;
   }
 
-  function handleExecute(formula) {
-    try {
-      const ctxVars = extractContextualVars(formula.expression);
-      const ctxValues = {};
+function handleExecute(formula) {
+  try {
+    const ctxVars = extractContextualVars(formula.expression);
+    const ctxValues = {};
 
-      for (const name of ctxVars) {
-        const input = window.prompt(`Enter value for ${name}:`);
-        if (input === null) return; // cancelled
-        ctxValues[name] = input;
-      }
-
-      const exprWithoutCtx = substituteContextual(
-        formula.expression,
-        ctxValues
-      );
-
-      const result = evaluateFormulaExpression(exprWithoutCtx, variables);
-      alert(`Result of ${formula.name}: ${result}`);
-    } catch (err) {
-      alert("Error: " + err.message);
+    for (const name of ctxVars) {
+      const input = window.prompt(`Enter value for ${name}:`);
+      if (input === null) return; // cancelled
+      ctxValues[name] = input;
     }
+
+    const exprWithoutCtx = substituteContextual(
+      formula.expression,
+      ctxValues
+    );
+
+    const result = evaluateFormulaExpression(exprWithoutCtx, variables);
+    alert(`Result of ${formula.name}: ${result}`);
+  } catch (err) {
+    alert("Error: " + err.message);
   }
+}
+
 
   return (
     <div>
