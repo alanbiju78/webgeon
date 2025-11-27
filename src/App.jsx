@@ -1,6 +1,5 @@
-// App.jsx
-import React, { useReducer, useEffect } from "react";
-import { appReducer, initialState } from "./state/appReducer";
+// src/App.jsx
+import { useReducer, useEffect } from "react";
 import { styles } from "./styles";
 
 import VariableForm from "./components/variables/VariableForm";
@@ -8,9 +7,53 @@ import VariablesList from "./components/variables/VariablesList";
 import FormulaForm from "./components/formulas/FormulaForm";
 import FormulasList from "./components/formulas/FormulasList";
 
-function App() {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+// --------- Reducer & initial state ---------
 
+const initialState = {
+  variables: [],
+  formulas: [],
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "ADD_VARIABLE":
+      return {
+        ...state,
+        variables: [...state.variables, action.payload],
+      };
+
+    case "DELETE_VARIABLE":
+      return {
+        ...state,
+        variables: state.variables.filter((v) => v.id !== action.id),
+      };
+
+    case "ADD_FORMULA":
+      return {
+        ...state,
+        formulas: [...state.formulas, action.payload],
+      };
+
+    case "DELETE_FORMULA":
+      return {
+        ...state,
+        formulas: state.formulas.filter((f) => f.id !== action.id),
+      };
+
+    case "LOAD_STATE":
+      return action.payload;
+
+    default:
+      return state;
+  }
+}
+
+// --------- App component ---------
+
+export default function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // load from localStorage once
   useEffect(() => {
     try {
       const saved = localStorage.getItem("formula_builder_state");
@@ -20,53 +63,78 @@ function App() {
           dispatch({ type: "LOAD_STATE", payload: parsed });
         }
       }
-    } catch (e) {
-      console.error("Failed to load state", e);
+    } catch (err) {
+      console.error("Failed to load state", err);
     }
   }, []);
 
+  // save to localStorage whenever state changes
   useEffect(() => {
     try {
       localStorage.setItem("formula_builder_state", JSON.stringify(state));
-    } catch (e) {
-      console.error("Failed to save state", e);
+    } catch (err) {
+      console.error("Failed to save state", err);
     }
   }, [state]);
 
   return (
-    <div style={styles.app}>
-      <h1>Formula Builder</h1>
-
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h2>Variables</h2>
-          <VariableForm
-            onAdd={(variable) =>
-              dispatch({ type: "ADD_VARIABLE", payload: variable })
-            }
-          />
-          <VariablesList
-            variables={state.variables}
-            onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
-          />
+    <div style={styles.page}>
+      <div style={styles.app}>
+        <div style={styles.header}>
+          <div style={styles.titleBlock}>
+            <h1 style={styles.title}>Formula Builder</h1>
+            <p style={styles.subtitle}>
+              Define reusable salary or billing variables, plug them into dynamic
+              formulas, and execute them with contextual inputs — all in your
+              browser.
+            </p>
+          </div>
+          <div style={styles.badge}>React · Client-side · Offline</div>
         </div>
 
-        <div style={styles.card}>
-          <h2>Formulas</h2>
-          <FormulaForm
-            onAdd={(formula) =>
-              dispatch({ type: "ADD_FORMULA", payload: formula })
-            }
-            variables={state.variables}
-          />
-          <FormulasList
-            formulas={state.formulas}
-            variables={state.variables}
-          />
+        <div style={styles.grid}>
+          {/* Variables card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h2 style={styles.cardTitle}>Variables</h2>
+              <span style={styles.cardHint}>Constants &amp; derived values</span>
+            </div>
+
+            <VariableForm
+              onAdd={(variable) =>
+                dispatch({ type: "ADD_VARIABLE", payload: variable })
+              }
+            />
+
+            <VariablesList
+              variables={state.variables}
+              onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
+            />
+          </div>
+
+          {/* Formulas card */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <h2 style={styles.cardTitle}>Formulas</h2>
+              <span style={styles.cardHint}>
+                Use variables &amp; contextual inputs
+              </span>
+            </div>
+
+            <FormulaForm
+              onAdd={(formula) =>
+                dispatch({ type: "ADD_FORMULA", payload: formula })
+              }
+              variables={state.variables}
+            />
+
+            <FormulasList
+              formulas={state.formulas}
+              variables={state.variables}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default App;

@@ -39,21 +39,18 @@ function FormulasList({ formulas, variables }) {
     <div>
       {formulas.map((f) => (
         <div key={f.id} style={styles.formulaCard}>
-          <div>
-            <strong>{f.name}</strong>
-          </div>
-          <div style={{ fontFamily: "monospace", fontSize: "0.9rem" }}>
-            {f.expression}
-          </div>
-          <div style={{ marginTop: "8px" }}>
-            <button
-              onClick={() => handleExecute(f)}
-              style={styles.buttonSmall}
-            >
-              Execute
-            </button>
-          </div>
+            <div style={styles.formulaName}>{f.name}</div>
+            <div style={styles.formulaExpression}>{f.expression}</div>
+            <div style={{ marginTop: "8px" }}>
+                <button
+                onClick={() => handleExecute(f)}
+                style={styles.buttonSmall}
+                >
+                Execute
+                </button>
+            </div>
         </div>
+
       ))}
     </div>
   );

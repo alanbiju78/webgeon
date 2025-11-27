@@ -11,41 +11,32 @@ function VariablesList({ variables, onDelete }) {
     <table style={styles.table}>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Expression / Value</th>
-          <th>Type</th>
-          <th></th>
+            <th style={styles.tableHeaderCell}>Name</th>
+            <th style={styles.tableHeaderCell}>Expression / Value</th>
+            <th style={styles.tableHeaderCell}>Type</th>
+            <th style={styles.tableHeaderCell}></th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         {variables.map((v) => (
-          <tr key={v.id}>
-            <td>{v.name}</td>
-            <td>{v.expression}</td>
-            <td>
-              <span
-                style={{
-                  padding: "2px 6px",
-                  borderRadius: "4px",
-                  fontSize: "0.8rem",
-                  backgroundColor:
-                    v.type === "CONSTANT" ? "#d1fae5" : "#bfdbfe",
-                }}
-              >
-                {v.type}
-              </span>
+            <tr key={v.id}>
+            <td style={styles.tableCell}>{v.name}</td>
+            <td style={styles.tableCell}>{v.expression}</td>
+            <td style={styles.tableCell}>
+                <span style={styles.typeBadge(v.type)}>{v.type}</span>
             </td>
-            <td>
-              <button
+            <td style={styles.tableCell}>
+                <button
                 onClick={() => onDelete(v.id)}
                 style={styles.buttonDanger}
-              >
+                >
                 Delete
-              </button>
+                </button>
             </td>
-          </tr>
+            </tr>
         ))}
-      </tbody>
+        </tbody>
+
     </table>
   );
 }
