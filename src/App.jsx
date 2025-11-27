@@ -131,26 +131,34 @@ export default function App() {
 
           {/* RIGHT COLUMN: lists (side by side) */}
           <div style={styles.rightGrid}>
-            <div style={styles.card}>
+            {/* Variable list card */}
+            <div style={{ ...styles.card, ...styles.listCard }}>
               <div style={styles.cardHeader}>
                 <h2 style={styles.cardTitle}>Variable List</h2>
                 <span style={styles.cardHint}>All defined variables</span>
               </div>
-              <VariablesList
-                variables={state.variables}
-                onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
-              />
+
+              <div style={styles.listBody}>
+                <VariablesList
+                  variables={state.variables}
+                  onDelete={(id) => dispatch({ type: "DELETE_VARIABLE", id })}
+                />
+              </div>
             </div>
 
-            <div style={styles.card}>
+            {/* Formula list card */}
+            <div style={{ ...styles.card, ...styles.listCard }}>
               <div style={styles.cardHeader}>
                 <h2 style={styles.cardTitle}>Formula List</h2>
                 <span style={styles.cardHint}>All saved formulas</span>
               </div>
-              <FormulasList
-                formulas={state.formulas}
-                variables={state.variables}
-              />
+
+              <div style={styles.listBody}>
+                <FormulasList
+                  formulas={state.formulas}
+                  variables={state.variables}
+                />
+              </div>
             </div>
           </div>
         </div>

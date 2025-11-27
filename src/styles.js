@@ -210,4 +210,15 @@ export const styles = {
     fontSize: "0.8rem",
     color: "#9ca3af",
   },
+    listBody: {
+    marginTop: "6px",
+    maxHeight: "260px",      // 👈 adjust this height if you want taller/shorter
+    overflowY: "auto",
+    paddingRight: "4px",     // little space so scrollbar doesn't overlap content
+  },
+    listCard: {
+    height: "320px",         // fixed card height for lists
+    display: "flex",
+    flexDirection: "column",
+  },
 };
