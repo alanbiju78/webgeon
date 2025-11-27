@@ -90,7 +90,7 @@ export default function App() {
               your browser.
             </p>
           </div>
-          <div style={styles.badge}>React · Client-side · Offline</div>
+          
         </div>
 
         {/* Main grid: left = forms, right = lists */}
